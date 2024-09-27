@@ -2,6 +2,11 @@
  * Globals
  */
 
+/* Extra Personal Changes */
+h4 {
+	text-decoration: underline;
+}
+
   /* Extra items extracted from the inline code in the online example */
   @media (min-width: 768px) {
     .bd-placeholder-img-lg {
