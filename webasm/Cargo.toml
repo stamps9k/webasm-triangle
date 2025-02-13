@@ -11,9 +11,8 @@ crate-type = ["cdylib", "rlib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-js-sys = "0.3.57"
-wasm-bindgen = "0.2.63"
-wavefront_obj = "10.0.0"
+js-sys = "0.3.77"
+wasm-bindgen = "0.2.100"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -36,7 +35,7 @@ wasm-bindgen-test = "0.3.13"
 opt-level = "s"
 
 [dependencies.web-sys]
-version = "0.3.4"
+version = "0.3.77"
 features = [
   'console',
   'Document',

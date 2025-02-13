@@ -1,12 +1,10 @@
 mod utils;
 mod shaders;
-mod object_loader;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::*;
 use shaders::*;
-use std::collections::*;
 use js_sys::Map;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -22,11 +20,12 @@ extern {
 
 #[wasm_bindgen]
 pub fn initialize_web_gl(resources: Map) -> Result<(), JsValue> {
+    utils::set_panic_hook();
+
     web_sys::console::log_1(&"Initialising...".into());
 
     let vert_shader: &str = &(resources.get(&JsValue::from_str("vert_shader")).as_string().unwrap_or(String::from("bad_value")));
     let frag_shader: &str = &(resources.get(&JsValue::from_str("frag_shader")).as_string().unwrap_or(String::from("bad_value")));
-    let obj = object_loader::parse_obj(&(resources.get(&JsValue::from_str("teapot")).as_string().unwrap_or(String::from("bad_value"))));
 
     let document = web_sys::window().unwrap().document().unwrap();
     let canvas = document.get_element_by_id("glCanvas").unwrap();
@@ -48,15 +47,15 @@ pub fn initialize_web_gl(resources: Map) -> Result<(), JsValue> {
     let mut vertices: Vec<f32> = Vec::new();
     
     for n in 0..9 {
-        if (n == 0) {
+        if n == 0 {
             vertices.push(-0.7);
-        } else if (n==1) {
+        } else if n==1 {
             vertices.push(-0.7);
-        } else if (n==3) {
+        } else if n==3 {
             vertices.push(0.7);
-        } else if (n==4) {
+        } else if n==4 {
             vertices.push(-0.7);
-        } else if (n==7) {
+        } else if n==7 {
             vertices.push(0.7);
         } else {
             vertices.push(0.0);
