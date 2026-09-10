@@ -13,7 +13,8 @@ module.exports = {
     static: {
       directory: path.join(__dirname, './'),
       watch: true
-    }
+		},
+		port: 1236
   },
   plugins: [
     new CopyWebpackPlugin(

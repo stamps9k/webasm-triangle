@@ -43,24 +43,16 @@ pub fn initialize_web_gl(resources: Map) -> Result<(), JsValue> {
 
     //let mut vertices: Vec<f32> = object_loader::get_vertices(&obj);
 
-    
-    let mut vertices: Vec<f32> = Vec::new();
-    
-    for n in 0..9 {
-        if n == 0 {
-            vertices.push(-0.7);
-        } else if n==1 {
-            vertices.push(-0.7);
-        } else if n==3 {
-            vertices.push(0.7);
-        } else if n==4 {
-            vertices.push(-0.7);
-        } else if n==7 {
-            vertices.push(0.7);
-        } else {
-            vertices.push(0.0);
-        }
-    }
+    // Three vertices (x, y, z), wound counter-clockwise: bottom-left,
+    // bottom-right, top-center. Previously built by an index-matching
+    // for-loop that only produced this by chance (any index not
+    // explicitly listed silently defaulted to 0.0) — written out
+    // directly so it's correct by construction instead of by luck.
+    let vertices: Vec<f32> = vec![
+        -0.7, -0.7, 0.0, // bottom-left
+         0.7, -0.7, 0.0, // bottom-right
+         0.0,  0.7, 0.0, // top
+    ];
 
     let color: [f32; 4] = [
         1.0,1.0,0.0,1.0
