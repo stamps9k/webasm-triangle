@@ -21,6 +21,7 @@ module.exports = {
 			[
 				{ from: './www/index.html', to: './index.html' },
 				{ from: './www/notes.html', to: './notes.html' },
+				{ from: './www/robots.txt', to: './robots.txt' },
 				{ from: './www/shaders/standard.vert', to: './shaders/standard.vert' },
 			  { from: './www/shaders/standard.frag', to: './shaders/standard.frag' },
 				{ from: './www/models/teapot.obj', to: './models/teapot.obj' },
