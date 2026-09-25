@@ -1,3 +1,5 @@
+.DS_Store
+
 webasm/target
 webasm/pkg
 website/node_modules
