@@ -1,0 +1,9 @@
+# Keep local build output and installed dependencies out of the Docker
+# build context: the image builds pkg/ and node_modules itself, and a
+# host copy would otherwise be copied over them by `COPY website/. .`.
+.git
+**/.DS_Store
+webasm/target
+webasm/pkg
+website/node_modules
+website/dist
