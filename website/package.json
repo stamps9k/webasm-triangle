@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "cd .. && husky website/.husky",
+    "audit:ci": "npx --yes audit-ci@7.1.0 --config audit-ci.jsonc"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "jquery": "^3.7.1"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "vite": "^8.3.6"
   }
 }

@@ -1,0 +1,51 @@
+# Security audits on dependency changes. Each check runs only when the
+# commit touches that half of the repo, and audits the *staged* files:
+#   website/  audit-ci against package.json, package-lock.json, audit-ci.jsonc
+#   webasm/   cargo deny check advisories against Cargo.toml, Cargo.lock, deny.toml
+# Exceptions live in website/audit-ci.jsonc and webasm/deny.toml.
+# Bypass in an emergency with: git commit --no-verify
+
+AUDIT_CI="audit-ci@7.1.0"
+
+staged=$(git diff --cached --name-only)
+
+# Copies the staged version of each file in $2.. from directory $1 into $tmp.
+stage_copy() {
+  dir=$1; shift
+  for f in "$@"; do
+    git show ":$dir/$f" > "$tmp/$f" 2>/dev/null || {
+      echo "pre-commit: $dir/$f is not staged or tracked; stage it too." >&2
+      return 1
+    }
+  done
+}
+
+tmp=$(mktemp -d) || exit 1
+trap 'rm -rf "$tmp"' EXIT
+
+if echo "$staged" | grep -qxE 'website/(package(-lock)?\.json|audit-ci\.jsonc)'; then
+  mkdir "$tmp/website"
+  ( tmp="$tmp/website"; stage_copy website package.json package-lock.json audit-ci.jsonc ) || exit 1
+  echo "pre-commit: website dependencies changed, running $AUDIT_CI..."
+  if ! (cd "$tmp/website" && npx --yes "$AUDIT_CI" --config audit-ci.jsonc --report-type summary); then
+    echo "pre-commit: website audit failed. Fix or allowlist (with a reason) in website/audit-ci.jsonc." >&2
+    exit 1
+  fi
+fi
+
+if echo "$staged" | grep -qxE 'webasm/(Cargo\.(toml|lock)|deny\.toml)'; then
+  if ! command -v cargo-deny >/dev/null 2>&1; then
+    echo "pre-commit: cargo-deny not found. Install with: cargo install --locked cargo-deny" >&2
+    exit 1
+  fi
+  mkdir -p "$tmp/webasm/src"
+  ( tmp="$tmp/webasm"; stage_copy webasm Cargo.toml Cargo.lock deny.toml ) || exit 1
+  # cargo needs a target to read the manifest; the code itself isn't audited.
+  : > "$tmp/webasm/src/lib.rs"
+  echo "pre-commit: webasm dependencies changed, running cargo deny check advisories..."
+  if ! cargo deny --manifest-path "$tmp/webasm/Cargo.toml" --locked check advisories; then
+    echo "pre-commit: webasm audit failed. Fix or ignore (with a reason) in webasm/deny.toml," >&2
+    echo "or stage an up-to-date Cargo.lock if cargo reported it needs updating." >&2
+    exit 1
+  fi
+fi
