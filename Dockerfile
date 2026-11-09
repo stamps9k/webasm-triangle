@@ -7,7 +7,7 @@
 # rather than parse it. That's what lets this use the image's current
 # Rust toolchain - the old Rust 1.81 pin only existed because webpack 4
 # couldn't parse wasm built by Rust 1.82+.
-FROM rust:1-slim AS wasm-builder
+FROM rust:1.99-slim-trixie AS wasm-builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
@@ -27,7 +27,7 @@ RUN wasm-pack build --target web
 # --- Website build stage -------------------------------------------------
 # Has Vite and all devDependencies. Discarded after this stage - none of
 # it becomes part of the shipped image.
-FROM node:22-slim AS website-builder
+FROM node:22-bookworm-slim AS website-builder
 WORKDIR /app/website
 
 COPY website/package.json website/package-lock.json ./
@@ -42,5 +42,5 @@ RUN npm run build
 # --- Runtime stage ---------------------------------------------------
 # No Rust, no Node - nginx just serves the files the previous stages
 # already produced.
-FROM nginx:alpine AS runtime
+FROM nginx:1.31-alpine3.24 AS runtime
 COPY --from=website-builder /app/website/dist /usr/share/nginx/html
