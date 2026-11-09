@@ -1,36 +1,35 @@
 {
-  "name": "create-wasm-app",
+  "name": "webasm-triangle-website",
   "version": "0.1.0",
-  "description": "create an app to consume rust-generated wasm packages",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "description": "Website for the WebAssembly triangle render demo",
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.config.js",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider webpack serve"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rustwasm/create-wasm-app.git"
+    "url": "git+https://github.com/stamps9k/webasm-triangle.git"
   },
   "keywords": [
     "webassembly",
     "wasm",
     "rust",
-    "webpack"
+    "webgl2",
+    "vite"
   ],
-  "author": "Ashley Williams <ashley666ashley@gmail.com>",
+  "author": "stampatron",
   "license": "(MIT OR Apache-2.0)",
   "bugs": {
-    "url": "https://github.com/rustwasm/create-wasm-app/issues"
+    "url": "https://github.com/stamps9k/webasm-triangle/issues"
   },
-  "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
+  "homepage": "https://github.com/stamps9k/webasm-triangle#readme",
   "dependencies": {
-    "wasm-game-of-life": "file:../webasm/pkg",
-    "jquery": "^3.6.0"
+    "jquery": "^3.7.1"
   },
   "devDependencies": {
-    "webpack": "^4.29.3",
-    "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^4.9.0",
-    "copy-webpack-plugin": "^5.0.0"
+    "vite": "^8.3.6"
   }
 }
