@@ -2,7 +2,7 @@ import $ from "jquery";
 // wasm-pack builds with `--target web`: the default export fetches and
 // instantiates the .wasm (Vite resolves its URL at build time), and must
 // be awaited before any exported function is called.
-import init, { initialize_web_gl } from "../../../webasm/pkg/wasm_game_of_life.js";
+import init, { initialize_web_gl } from "../../../webasm/pkg/webasm_triangle.js";
 
 await init();
 $(fetch_vert_shader);

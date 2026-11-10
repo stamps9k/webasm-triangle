@@ -1,5 +1,5 @@
 [package]
-name = "wasm-game-of-life"
+name = "webasm-triangle"
 version = "0.1.0"
 authors = ["jwstamp"]
 edition = "2018"

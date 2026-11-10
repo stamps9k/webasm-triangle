@@ -1,3 +1,8 @@
+# Rust checks: when the commit touches webasm/, run cargo fmt --check,
+# clippy (against the wasm32 target that ships) and cargo test, as the
+# other Rust repos' hooks do. These check the working tree, not just the
+# staged files.
+#
 # Security audits on dependency changes. Each check runs only when the
 # commit touches that half of the repo, and audits the *staged* files:
 #   website/  audit-ci against package.json, package-lock.json, audit-ci.jsonc
@@ -19,6 +24,18 @@ stage_copy() {
     }
   done
 }
+
+if echo "$staged" | grep -q '^webasm/'; then
+  echo "pre-commit: webasm changed, running cargo fmt, clippy and test..."
+  (
+    cd webasm || exit 1
+    if ! cargo fmt --check; then
+      echo "pre-commit: cargo fmt found issues. Run 'cargo fmt' in webasm/ and re-stage." >&2
+      exit 1
+    fi
+    cargo clippy --target wasm32-unknown-unknown -- -D warnings && cargo test
+  ) || exit 1
+fi
 
 tmp=$(mktemp -d) || exit 1
 trap 'rm -rf "$tmp"' EXIT
