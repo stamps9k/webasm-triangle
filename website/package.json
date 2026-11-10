@@ -23,7 +23,7 @@
     "vite"
   ],
   "author": "stampatron",
-  "license": "(MIT OR Apache-2.0)",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/stamps9k/webasm-triangle/issues"
   },
